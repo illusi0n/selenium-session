@@ -1,5 +1,8 @@
 package com.examples.selenium;
 
+import java.util.Set;
+
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -17,18 +20,22 @@ public class MainApp {
 
 		driver.get("http://www.gmail.com");
 
-		Thread.sleep(25000);
+		Thread.sleep(30000);
 
-		cookieManager.save(driver);
-
+		//cookieManager.save(driver);
+		Set<Cookie> cookies = driver.manage().getCookies();
+		
 		driver.close();
 
 		driver = new ChromeDriver();
 
 		driver.get("http://www.gmail.com");
-		cookieManager.load(driver);
+		driver.manage().deleteAllCookies();
+		
+		Thread.sleep(10000);
+		//cookieManager.load(driver);
+		cookieManager.load(driver, cookies);
 		driver.navigate().refresh();
-
 	}
 
 }

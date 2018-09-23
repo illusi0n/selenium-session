@@ -26,4 +26,10 @@ public class DriverCookieManagerImpl implements DriverCookieManager {
 		return true;
 	}
 
+	public boolean load(WebDriver driver, Set<Cookie> cookies) {
+		for (Cookie cookie : cookies)
+			driver.manage().addCookie(cookie);
+		return true;
+	}
+
 }

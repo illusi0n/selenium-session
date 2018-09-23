@@ -9,7 +9,7 @@ public class CookieConvertor {
 
 	/**
 	 * Convert cookie to string to a following format
-	 * name,value,expires,path,domain,isSecure,isHttpOnly
+	 * name,value,expires,domain,path,isSecure,isHttpOnly
 	 * 
 	 * @param cookie
 	 * @return
@@ -20,7 +20,7 @@ public class CookieConvertor {
 		cookieAsString.append(cookie.getValue() + ",");
 		cookieAsString.append(cookie.getDomain() + ",");
 		cookieAsString.append(cookie.getPath() + ",");
-		if(cookie.getExpiry() != null)
+		if (cookie.getExpiry() != null)
 			cookieAsString.append(cookie.getExpiry().getTime() + ",");
 		else
 			cookieAsString.append("MISSING" + ",");
@@ -43,10 +43,10 @@ public class CookieConvertor {
 		String value = cookieElements[1];
 		String domain = cookieElements[2];
 		String path = cookieElements[3];
-		if(cookieElements[4].equals("MISSING")) {
-			return new Cookie(name, value, domain);
+		Date expire = null;
+		if (!cookieElements[4].equals("MISSING")) {
+			expire = new Date(Long.valueOf(cookieElements[4]));
 		}
-		Date expire = new Date(Long.valueOf(cookieElements[4]));
 		boolean isSecure = Boolean.valueOf(cookieElements[5]);
 		boolean isHttpOnly = Boolean.valueOf(cookieElements[6]);
 		return new Cookie(name, value, domain, path, expire, isSecure, isHttpOnly);
