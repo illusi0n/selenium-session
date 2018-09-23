@@ -14,12 +14,14 @@ public class DriverCookieManagerImpl implements DriverCookieManager {
 	}
 
 	public boolean save(WebDriver driver) {
+		System.out.println("Get cookies");
 		Set<Cookie> cookies = driver.manage().getCookies();
 		cookieManager.save(cookies, "cookies.txt");
 		return true;
 	}
 
 	public boolean load(WebDriver driver) {
+		System.out.println("Load cookies");
 		Set<Cookie> cookies = cookieManager.load("cookies.txt");
 		for (Cookie cookie : cookies)
 			driver.manage().addCookie(cookie);
