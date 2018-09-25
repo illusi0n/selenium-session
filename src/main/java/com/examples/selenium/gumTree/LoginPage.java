@@ -34,6 +34,10 @@ public class LoginPage extends BasePage{
 	@FindBy(name="password")
 	private WebElement passwordLoginLocator;
 
+	@FindBy (xpath ="//button[contains(text(),'I Accept')]")
+	private WebElement acceptCookiesLocator;
+
+	
 	    String sEmail = "rade.testing@gmail.com";
 	    String sPassword = "Hard1234!@#$";
 	    
@@ -41,7 +45,7 @@ public class LoginPage extends BasePage{
 	    String sTitleBar = "Bot message";
 
 			// go to Login page of GumTree site
-			public LoginPage(String sEmail, String sPassword) { 
+			public LoginPage loginGumTree(String sEmail, String sPassword) { 
 			System.out.println("Navigating to GumTree website login page");
 			driver.get(Constants.GUM_TREE_URL+Constants.LOGIN_URL); 
 			
@@ -56,7 +60,7 @@ public class LoginPage extends BasePage{
 			
 			
 			try {
-			WebElement acceptButton = driver.findElement(By.xpath("//button[contains(text(),'I Accept')]"));
+			WebElement acceptButton = driver.findElement(By.xpath(""));
 			if (acceptButton.isDisplayed()) {
 				acceptButton.click();
 				System.out.println("Accepting cookie policy");
@@ -153,4 +157,4 @@ public class LoginPage extends BasePage{
 	        JOptionPane.showMessageDialog(null, sInfoMessage, "InfoBox: " + sTitleBar, JOptionPane.INFORMATION_MESSAGE);
 	    }
 	}
-}
+
