@@ -13,10 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.events.WebDriverEventListener;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 public class LoginPage extends BasePage{
 	 
@@ -34,7 +31,10 @@ public class LoginPage extends BasePage{
 	@FindBy(name="password")
 	private WebElement passwordLoginLocator;
 
-	@FindBy (xpath ="//button[contains(text(),'I Accept')]")
+	@FindBy(xpath="//button[contains(text(),'Login')]")
+	private WebElement loginButtonLocator;
+	
+	@FindBy (className ="btn-secondary btn-wide")
 	private WebElement acceptCookiesLocator;
 	
 	@FindBy (xpath ="\"/html[1]/body[1]/div[6]/div[2]/iframe[1]\"")
@@ -45,26 +45,36 @@ public class LoginPage extends BasePage{
 	 
 	@FindBy(id="recaptcha-skip-button")
 	private WebElement skipButtonLocator;
-	 
-	    String sEmail = "rade.testing@gmail.com";
-	    String sPassword = "Hard1234!@#$";
+	
+	@FindBy(id="dCF_input")
+	private WebElement botDetectorLocator;
 	    
 	    String sInfoMessageRemoveManually = "Please remove anti-bot protection manually";
 	    String sTitleBar = "Bot message";
 
 		// go to Login page of GumTree site
 	    //FIXME currently returns null
-		  public LoginPage loginGumTree(String sEmail, String sPassword) { 
-			System.out.println("Navigating to GumTree website login page");
-			driver.get(Constants.GUM_TREE_URL+Constants.LOGIN_URL); 
-			
+		  public LoginPage loginGumTree(String sEmail, String sPassword) throws InterruptedException {
+		    
+		    System.out.println("Navigating to GumTree website login page");
+	      driver.get(Constants.GUM_TREE_URL+Constants.LOGIN_URL); 
+	      acceptCookiePolicy();
+	      Thread.sleep(289);
+		  if (isUserLoggedIn()==true) {
+	      System.out.println("Already logged in!");
+		  } else {  
+			Thread.sleep(115);
 			System.out.println("Entering email");
 			waitUntilVisible(5, emailLoginLocator);
 			emailLoginLocator.sendKeys(sEmail);
-			
+			Thread.sleep(280);
 			System.out.println("Entering password");
 			waitUntilVisible(5, passwordLoginLocator);
 			passwordLoginLocator.sendKeys(sPassword);
+	     Thread.sleep(330);
+			waitUntilVisible(5, loginButtonLocator);
+			loginButtonLocator.click();
+			}
 			return this;
 			}
 
@@ -82,6 +92,10 @@ public class LoginPage extends BasePage{
   		public boolean isCaptchaFramePresent() {
   		  return captchaLocator.isDisplayed();
   		}
+  		
+  		public boolean isBotDetectorPresent() {
+        return botDetectorLocator.isDisplayed();
+      }
   		
   		public LoginPage waitUntilCaptchaRemoved() throws InterruptedException {
   		  try {
@@ -103,6 +117,13 @@ public class LoginPage extends BasePage{
           }
         }
 	     	return this;
+  		}
+  		
+  		public LoginPage waitUntilBotDetectorRemoved() {
+  		  if (isBotDetectorPresent()==true) {
+  		    
+  		  }
+  		  return this;
   		}
   		
       public boolean verifyButtonCheck() {
@@ -140,6 +161,10 @@ public class LoginPage extends BasePage{
 			 	 return bAntibot;
 			 	}
 				
+			 	public boolean isUserLoggedIn() {
+			 	  String URL = driver.getCurrentUrl();
+			 	  return URL.contains(Constants.POSTAD_URL);
+			 	}
 				
 //				String sInfoMessage = "Undefined message";
 //				 do { 
@@ -159,16 +184,9 @@ public class LoginPage extends BasePage{
 //				 WebElement postAddButton = driver.findElement(By.xpath("//ul[@class='clearfix']/li[2]/a[@title='Post an ad']"));
 //				 postAddButton.click();
 
-//		WebDriverWait wait = new WebDriverWait(driver, 10);
-//			WebElement elementWait = wait.until(
-//			        ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Skip')]")));
-//	        System.out.println("Either 'Skip' button is displayed or seconds have timed out");
-	        
 //			WebElement postAdButton = driver.findElement(By.xpath("//div[@class='txt-center space-maxl']/a[contains(text(),'Post an ad')]"));
 //			WebElement manageMyAdds = driver.findElement(By.xpath("//a[@title='Manage my ads']"));
 
-//	        if (skipButton.isDisplayed()) {
-//	    		System.out.println("Waiting to manually populate anti-bot protection");
 //	  			     
 //				WebDriverWait wait2 = new WebDriverWait(driver, 10);
 //				WebElement elementWait2 = wait.until(

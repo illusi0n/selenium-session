@@ -26,36 +26,39 @@ public class MainApp extends LoginPage {
 		
 		WebDriver driver = new ChromeDriver();
 
+    Thread.sleep(234);
 		driver.manage().window().maximize(); 
-		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+		Thread.sleep(459);
 		
-		LoginPage loginPage= new LoginPage(driver);
-		driver.get("http://www.gmail.com");
+    String sEmail = "rade.testing@gmail.com";
+    String sPassword = "Hard1234!@#$";
+    
+    LoginPage loginPage = new LoginPage(driver).loginGumTree(sEmail, sPassword);
 
-		Thread.sleep(30000);
-
+    loginPage.waitUntilCaptchaRemoved();
+    
+    Thread.sleep(2000);
 		//cookieManager.save(driver);
 		Set<Cookie> cookies = driver.manage().getCookies();
 
 		driver.quit();
 		WebDriver driver2 = new ChromeDriver();
-		driver2.get("http://www.gmail.com");
+		
+    LoginPage loginPage2 = new LoginPage(driver2).loginGumTree(sEmail, sPassword);
 
 		driver2.manage().deleteAllCookies();
 		
 		Thread.sleep(1000);
 		cookieManager.load(driver2,cookies);
-		driver2.get("http://www.gmail.com");
 		Thread.sleep(1000);
 		driver2.navigate().refresh();
 	}
-
+/*
 	public static void openBrowserAndResetCookie() throws InterruptedException {
 		System.setProperty(Constants.CHROME_DRIVER_PROPERTY, Constants.CHROME_DRIVER_LOCATION);
 		WebDriver driver = new ChromeDriver();
 
-		driver.get("http://www.gmail.com");
-
+		//LoginPage loginPage = new LoginPage(driver).loginGumTree(sEmail, sPassword);
 		Thread.sleep(30000);
 
 		//cookieManager.save(driver);
@@ -71,5 +74,5 @@ public class MainApp extends LoginPage {
 			driver.manage().addCookie(cookie);
 		driver.navigate().refresh();
 	}
-	
+	*/
 }
