@@ -36,7 +36,15 @@ public class LoginPage extends BasePage{
 
 	@FindBy (xpath ="//button[contains(text(),'I Accept')]")
 	private WebElement acceptCookiesLocator;
-
+	
+	@FindBy (xpath ="\"/html[1]/body[1]/div[6]/div[2]/iframe[1]\"")
+	private WebElement captchaLocator;
+	
+	@FindBy(id="recaptcha-verify-button")
+  private WebElement verifyButtonLocator;
+	 
+	@FindBy(id="recaptcha-skip-button")
+	private WebElement skipButtonLocator;
 	 
 	    String sEmail = "rade.testing@gmail.com";
 	    String sPassword = "Hard1234!@#$";
@@ -46,7 +54,7 @@ public class LoginPage extends BasePage{
 
 		// go to Login page of GumTree site
 	    //FIXME currently returns null
-		public LoginPage loginGumTree(String sEmail, String sPassword) throws InterruptedException { 
+		  public LoginPage loginGumTree(String sEmail, String sPassword) { 
 			System.out.println("Navigating to GumTree website login page");
 			driver.get(Constants.GUM_TREE_URL+Constants.LOGIN_URL); 
 			
@@ -57,86 +65,100 @@ public class LoginPage extends BasePage{
 			System.out.println("Entering password");
 			waitUntilVisible(5, passwordLoginLocator);
 			passwordLoginLocator.sendKeys(sPassword);
-			
-			
-			try {
-				WebElement acceptButton = driver.findElement(By.xpath(""));
-				if (acceptButton.isDisplayed()) {
-					acceptButton.click();
-				System.out.println("Accepting cookie policy");
-				}
+			return this;
 			}
-			finally {
-				System.out.println("Cookie policy not displayed!");
-			}
-			
-			
-			System.out.println("Entering password");
-			WebElement passwordInput = driver.findElement(By.name("password"));
-			passwordInput.sendKeys(sPassword);
-			
-			System.out.println("Clicking on Login button");
-			WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(),'Login')]"));
-			loginButton.click();
-			
-			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-			
-			boolean bAntibot = false;	
-			
-	     	Thread.sleep(500);
 
-	    		System.out.println("Locating captcha window");
-	    		driver.switchTo().frame(driver.findElement(By.xpath("/html[1]/body[1]/div[6]/div[2]/iframe[1]")));
-
-	     	Thread.sleep(500);
-
-			 	try 
-			 	{
-			 		WebElement verifyButton = driver.findElement(By.id("recaptcha-verify-button"));
-					if (verifyButton.isDisplayed()) {
-					System.out.println("Anti-bot is displayed! Please solve it manually!");
-						bAntibot = true;
-					} 
-			 	} catch (org.openqa.selenium.NoSuchElementException e) 
-			 	{
-					System.out.println("Verify button not displayed");
-			 	}
-			 	
-				try 
-				{
-					WebElement skipButton = driver.findElement(By.id("recaptcha-skip-button"));
-					if (skipButton.isDisplayed()) 
-						{
-						System.out.println("Anti-bot is displayed! Please solve it manually!");
-						bAntibot = true; 
-						} 
-				} 
-				catch (org.openqa.selenium.NoSuchElementException e) 
-				{
-					System.out.println("Skip button not displayed");
-				}
-				
-				String sInfoMessage = "Undefined message";
-				 do { 
-					infoBox(sInfoMessage, sTitleBar);
-					Thread.sleep(1000);
-					try {
-						WebElement status = driver.findElement(By.name("status"));
-						if (status.isDisplayed()) {
-							bAntibot=false;
-						}
-					} catch (org.openqa.selenium.NoSuchElementException e) 
-					{
-						System.out.println("Anti-bot still present, retrying");
-					}
-				} while (bAntibot == true);
-				
-				 WebElement postAddButton = driver.findElement(By.xpath("//ul[@class='clearfix']/li[2]/a[@title='Post an ad']"));
-				 postAddButton.click();
-				 
-				 
-				 return null;
+  		public LoginPage acceptCookiePolicy(){
+  		  if(acceptCookiesLocator.isDisplayed()) {
+		  System.out.println("Accepting cookie policy");
+      waitUntilVisible(5, acceptCookiesLocator);
+      acceptCookiesLocator.click();
+  		  } else {
+      System.out.println("Cookie policy not displayed!");
+        }
+  		  return this;
 		}
+			
+  		public boolean isCaptchaFramePresent() {
+  		  return captchaLocator.isDisplayed();
+  		}
+  		
+  		public LoginPage waitUntilCaptchaRemoved() throws InterruptedException {
+  		  try {
+  		    if(isCaptchaFramePresent()) System.out.println("Moving to captcha window");
+ } catch(org.openqa.selenium.NoSuchElementException e)  {
+   System.out.println("Frame not displayed or locator changed!");
+ }
+        driver.switchTo().frame(captchaLocator);
+        int i=0;
+        while (true){
+          if(verifyButtonCheck()==false && skipButtonCheck()==false) { 
+            System.out.println("Captcha solved!!!");
+            break;
+            }
+          else {
+              System.out.println("Captcha still not solved. Retry number: "+i);
+              Thread.sleep(1000);
+              i++;
+          }
+        }
+	     	return this;
+  		}
+  		
+      public boolean verifyButtonCheck() {
+        System.out.println("Trying to catch 'Verify' button");
+        boolean bAntibot = false;
+       try 
+       {
+         if (verifyButtonLocator.isDisplayed()) {
+         System.out.println("Anti-bot is displayed! Please solve it manually!");
+           bAntibot = true;
+         } 
+       } catch (org.openqa.selenium.NoSuchElementException e) 
+       {
+         System.out.println("'Verify' button not displayed");
+       }
+       return bAntibot;
+      }
+      
+     
+			 	public boolean skipButtonCheck() {
+			     System.out.println("Trying to catch 'Skip' button");
+          boolean bAntibot = false; 
+			 	 try 
+		      {
+		        if (skipButtonLocator.isDisplayed()) 
+		          {
+		          System.out.println("Anti-bot is displayed! Please solve it manually!");
+		          bAntibot = true; 
+		          } 
+		      } 
+		      catch (org.openqa.selenium.NoSuchElementException e) 
+		      {
+		        System.out.println("Skip button not displayed");
+		      }
+			 	 return bAntibot;
+			 	}
+				
+				
+//				String sInfoMessage = "Undefined message";
+//				 do { 
+//					infoBox(sInfoMessage, sTitleBar);
+//					Thread.sleep(1000);
+//					try {
+//						WebElement status = driver.findElement(By.name("status"));
+//						if (status.isDisplayed()) {
+//							bAntibot=false;
+//						}
+//					} catch (org.openqa.selenium.NoSuchElementException e) 
+//					{
+//						System.out.println("Anti-bot still present, retrying");
+//					}
+//				} while (bAntibot == true);
+				
+//				 WebElement postAddButton = driver.findElement(By.xpath("//ul[@class='clearfix']/li[2]/a[@title='Post an ad']"));
+//				 postAddButton.click();
+
 //		WebDriverWait wait = new WebDriverWait(driver, 10);
 //			WebElement elementWait = wait.until(
 //			        ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Skip')]")));
