@@ -43,56 +43,13 @@ public class MainApp extends LoginPage {
 
 		driver2.manage().deleteAllCookies();
 		
-<<<<<<< HEAD
 		Thread.sleep(1000);
 		cookieManager.load(driver2,cookies);
 		driver2.get("http://www.gmail.com");
 		Thread.sleep(1000);
 		driver2.navigate().refresh();
 	}
-	
-	/*public static void main(String[] args) throws InterruptedException {
-		System.setProperty(Constants.CHROME_DRIVER_PROPERTY, Constants.CHROME_DRIVER_LOCATION);
-		WebDriver driver = new ChromeDriver();
 
-		//driver.get("http://www.gmail.com");
-		driver.get("http://www.gumtree.com");
-		
-		Thread.sleep(50000);
-
-		//cookieManager.save(driver);
-		Set<Cookie> cookies = driver.manage().getCookies();
-		System.out.println(cookies.toString());
-=======
->>>>>>> c51cf14b73dbcf3a62f39c5270f906bfadd08fd5
-		driver.quit();
-
-		driver = new ChromeDriver();
-
-		//driver.get("http://www.gmail.com");
-		driver.get("http://www.gumtree.com");
-		driver.manage().deleteAllCookies();
-//		driver.manage().deleteCookieNamed("GMAIL_AT");
-//		System.out.println("COMPASS");
-//		System.out.println(cookies.toString());
-//		driver.manage().deleteCookieNamed("COMPASS");
-//		System.out.println(cookies.toString());
-		System.out.println(cookies.toString());
-		Thread.sleep(3000);
-		//cookieManager.load(driver);
-		cookieManager.load(driver, cookies);
-		System.out.println("Refresh");
-		driver.navigate().refresh();
-<<<<<<< HEAD
-		Set<Cookie> cookies2 = driver.manage().getCookies();
-		System.out.println(cookies2.toString());
-	}*/
-=======
-		//openBrowserAndResetCookie();
-	}
->>>>>>> c51cf14b73dbcf3a62f39c5270f906bfadd08fd5
-
-	
 	public static void openBrowserAndResetCookie() throws InterruptedException {
 		System.setProperty(Constants.CHROME_DRIVER_PROPERTY, Constants.CHROME_DRIVER_LOCATION);
 		WebDriver driver = new ChromeDriver();

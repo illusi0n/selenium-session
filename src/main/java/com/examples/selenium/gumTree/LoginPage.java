@@ -37,15 +37,16 @@ public class LoginPage extends BasePage{
 	@FindBy (xpath ="//button[contains(text(),'I Accept')]")
 	private WebElement acceptCookiesLocator;
 
-	
+	 
 	    String sEmail = "rade.testing@gmail.com";
 	    String sPassword = "Hard1234!@#$";
 	    
 	    String sInfoMessageRemoveManually = "Please remove anti-bot protection manually";
 	    String sTitleBar = "Bot message";
 
-			// go to Login page of GumTree site
-			public LoginPage loginGumTree(String sEmail, String sPassword) { 
+		// go to Login page of GumTree site
+	    //FIXME currently returns null
+		public LoginPage loginGumTree(String sEmail, String sPassword) throws InterruptedException { 
 			System.out.println("Navigating to GumTree website login page");
 			driver.get(Constants.GUM_TREE_URL+Constants.LOGIN_URL); 
 			
@@ -56,16 +57,16 @@ public class LoginPage extends BasePage{
 			System.out.println("Entering password");
 			waitUntilVisible(5, passwordLoginLocator);
 			passwordLoginLocator.sendKeys(sPassword);
-			}
 			
 			
 			try {
-			WebElement acceptButton = driver.findElement(By.xpath(""));
-			if (acceptButton.isDisplayed()) {
-				acceptButton.click();
+				WebElement acceptButton = driver.findElement(By.xpath(""));
+				if (acceptButton.isDisplayed()) {
+					acceptButton.click();
 				System.out.println("Accepting cookie policy");
+				}
 			}
-			}finally {
+			finally {
 				System.out.println("Cookie policy not displayed!");
 			}
 			
@@ -115,6 +116,7 @@ public class LoginPage extends BasePage{
 					System.out.println("Skip button not displayed");
 				}
 				
+				String sInfoMessage = "Undefined message";
 				 do { 
 					infoBox(sInfoMessage, sTitleBar);
 					Thread.sleep(1000);
@@ -131,6 +133,10 @@ public class LoginPage extends BasePage{
 				
 				 WebElement postAddButton = driver.findElement(By.xpath("//ul[@class='clearfix']/li[2]/a[@title='Post an ad']"));
 				 postAddButton.click();
+				 
+				 
+				 return null;
+		}
 //		WebDriverWait wait = new WebDriverWait(driver, 10);
 //			WebElement elementWait = wait.until(
 //			        ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Skip')]")));
