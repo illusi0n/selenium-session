@@ -43,6 +43,7 @@ public class MainApp extends LoginPage {
 
 		driver2.manage().deleteAllCookies();
 		
+<<<<<<< HEAD
 		Thread.sleep(1000);
 		cookieManager.load(driver2,cookies);
 		driver2.get("http://www.gmail.com");
@@ -62,6 +63,8 @@ public class MainApp extends LoginPage {
 		//cookieManager.save(driver);
 		Set<Cookie> cookies = driver.manage().getCookies();
 		System.out.println(cookies.toString());
+=======
+>>>>>>> c51cf14b73dbcf3a62f39c5270f906bfadd08fd5
 		driver.quit();
 
 		driver = new ChromeDriver();
@@ -80,8 +83,36 @@ public class MainApp extends LoginPage {
 		cookieManager.load(driver, cookies);
 		System.out.println("Refresh");
 		driver.navigate().refresh();
+<<<<<<< HEAD
 		Set<Cookie> cookies2 = driver.manage().getCookies();
 		System.out.println(cookies2.toString());
 	}*/
+=======
+		//openBrowserAndResetCookie();
+	}
+>>>>>>> c51cf14b73dbcf3a62f39c5270f906bfadd08fd5
 
+	
+	public static void openBrowserAndResetCookie() throws InterruptedException {
+		System.setProperty(Constants.CHROME_DRIVER_PROPERTY, Constants.CHROME_DRIVER_LOCATION);
+		WebDriver driver = new ChromeDriver();
+
+		driver.get("http://www.gmail.com");
+
+		Thread.sleep(30000);
+
+		//cookieManager.save(driver);
+		Set<Cookie> cookies = driver.manage().getCookies();
+
+
+		driver.manage().deleteAllCookies();
+		driver.navigate().refresh();
+		
+		Thread.sleep(10000);
+		//cookieManager.load(driver);
+		for (Cookie cookie : cookies)
+			driver.manage().addCookie(cookie);
+		driver.navigate().refresh();
+	}
+	
 }
